@@ -11,3 +11,10 @@ go get -d github.com/raunakjodhawat/multisort
 2. time
 3. reflect
 4. testing
+
+### Website
+```
+    https://raunakjodhawat.github.io/multisort/
+```
+
+[![GoDoc](https://godoc.org/github.com/raunakjodhawat/multisort?status.svg)](https://godoc.org/github.com/raunakjodhawat/multisort)
