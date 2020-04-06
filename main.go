@@ -1,40 +1,19 @@
 // Package multisort extends the official Go Package to expand the functionality provided by Sort Package
-//package multisort
-package main
+package multisort
 
 import (
-	"encoding/json"
 	"fmt"
 	"reflect"
 	"sort"
+	"sync"
 )
 
-// Type multiSortInterface implements Sort interface
-type multiSortStruct struct{
-	Name string
-	Age int
-}
-
-type multiSortSlice []multiSortStruct
-// Less perform swap operation
-func (ms multiSortSlice) CustomLess(i, j int, key string) bool{
-	reflectValue := reflect.ValueOf(ms[0]).FieldByName(key)
-	if !reflectValue.IsValid() || reflectValue.IsNil() {
+func (ms multiSortSlice) Less(i, j int) bool{
+	reflectValue := reflect.ValueOf(ms[0]).FieldByName(GetKey())
+	if !reflectValue.IsValid() {
 		return true
 	}
-	return reflect.ValueOf(ms[i]).FieldByName(key).String() > reflect.ValueOf(ms[j]).FieldByName(key).String()
-}
-
-func getKey() string {
-	return "Name"
-}
-
-func (ms multiSortSlice) Less(i, j int) bool{
-	//reflectValue := reflect.ValueOf(ms[0]).FieldByName(getKey())
-	//if !reflectValue.IsValid() || reflectValue.IsNil() {
-	//	return true
-	//}
-	return reflect.ValueOf(ms[i]).FieldByName(getKey()).String() < reflect.ValueOf(ms[j]).FieldByName(getKey()).String()
+	return GetLessValue(reflect.ValueOf(ms[i]).FieldByName(GetKey()), reflect.ValueOf(ms[j]).FieldByName(GetKey()))
 }
 
 // Len returns the length of the slice (interface)
@@ -47,81 +26,85 @@ func (ms multiSortSlice) Swap(i, j int) {
 	ms[i], ms[j] = ms[j], ms[i]
 }
 
-// Main function, for testing the functionality by the developer
-func main(){
-	ms1 := multiSortStruct{
-		Name: "Joe",
-		Age: 26,
-	}
-	ms2 := multiSortStruct{
-		Name: "Avin",
-		Age: 35,
-	}
+type multiSortInterface interface{}
+type multiSortSlice []multiSortInterface
 
-	ms := []multiSortStruct{ms1, ms2}
-	fmt.Println(ms)
-	MulTest(ms, []string{"Name"}, []bool{true})
-	fmt.Println(ms)
-	//MultiSort(personSlice, []string{"name"}, []bool{true})
-}
-
-func MulTest(ms multiSortSlice, sortKeys []string, ascendingSortOrder []bool){
-	sort.Sort(ms)
-}
 // MultiSort takes in a data *interface and the dataSlice *interface
 // it returns the sorted slice based on the keys specified by sortKeys and ascendingSortOrder values
 // returns an error, if not nil
-func MultiSort(data interface{}, sortKeys []string, ascendingSortOrder []bool) error{
+func MultiSort(unsortedSlice interface{}, sortKeys []string, ascendingSortOrder []bool){
 	// return if not a slice
-	if reflect.TypeOf(data).Kind() != reflect.Slice{
-		return fmt.Errorf("input is not a slice")
+	if reflect.TypeOf(unsortedSlice).Kind() != reflect.Slice{
+		fmt.Errorf("input is not a slice")
 	}
-	// Convert interface to slice
-	reflectCopy := reflect.ValueOf(data)
-	reflectSlice:= make([]interface{}, reflectCopy.Len())
-	for i, _ := range reflectSlice {
-		reflectSlice[i] = reflectCopy.Index(i).Interface()
+	// TODO: Application does not throw any fatal error
+
+	var ms multiSortSlice
+	// Anonymous function to launch three Go routines, for concurrent processing of non related processing
+	var wg sync.WaitGroup
+	wg.Add(2)
+	go normalizeAscendingSortOrderSlice(&wg, sortKeys, ascendingSortOrder)
+	go copyKeys(&wg, sortKeys)
+	wg.Wait()
+
+	ms = copyUnsortedSliceToMultiSort(unsortedSlice)
+	fmt.Println(ms)
+	// By default sort by the order in which Keys is received. Then By the order (if present) in ascendingSortOrder, else (Ascending order as default ordering)
+	// Iterate on the sortKeys
+	for i, _ := range SortKeys {
+		CurrentKeyIndex = i
+		sort.Sort(ms)
+		// ms
+		fmt.Println(ms)
+		// TODO: send correct slice
 	}
-	t := reflect.TypeOf(data).Elem()
-	ms := reflect.New(t).Elem().Interface()
-	fmt.Println(reflect.TypeOf(ms))
+	//
+}
+
+func normalizeAscendingSortOrderSlice(wg *sync.WaitGroup, sortKeys []string, ascendingSortOrder []bool){
+	defer wg.Done()
 	// check len of sortKeys and sortOrder
-		// If length of sortKeys < ascendingSortOrder. Anything after the length of sortKeys, for ascendingSortOrder is ignored.
-		// If length of sortKeys > ascendingSortOrder. True is appended to ascendingSortOrder, until its length become equal to sortKeys
-		// Default sort direction is Ascending
+	// If length of sortKeys < ascendingSortOrder. Anything after the length of sortKeys, for ascendingSortOrder is ignored.
+	// If length of sortKeys > ascendingSortOrder. True is appended to ascendingSortOrder, until its length become equal to sortKeys
+	// Default sort direction is Ascending
 	if len(sortKeys) != len(ascendingSortOrder) {
 		for len(sortKeys) >= len(ascendingSortOrder) {
 			ascendingSortOrder = append(ascendingSortOrder, true)
 		}
 	}
-	// By default sort by the order in which Keys is received. Then By the order (if present) in ascendingSortOrder, else (Ascending order as default ordering)
-	// Iterate on the sortKeys
-	for _, key := range sortKeys {
-		typeOfObject := reflect.TypeOf(key)
-
-		switch typeOfObject.Kind() {
-		case reflect.String:
-			if reflect.TypeOf(reflectSlice[0]).Kind() == reflect.Struct {
-				//sort.Sort(data.(multiSortInterface))
-			}
-		case reflect.Slice:
-			//
-		}
-	}
-	return nil
 }
 
-func createStructType(data []byte, dataStruct interface{}) interface{} {
-	json.Unmarshal(data, &dataStruct)
-	reflectCopy := reflect.ValueOf(data)
-	reflectSlice:= make([]interface{}, reflectCopy.Len())
-	for i, _ := range reflectSlice {
-		reflectSlice[i] = reflectCopy.Index(i).Interface()
+func copyKeys(wg *sync.WaitGroup, sortKeys []string){
+	defer wg.Done()
+	// Copy SortKeys to global object
+	for _, key := range sortKeys {
+		SortKeys = append(SortKeys, key)
 	}
-	type dataType struct{}
-	for _, v := range reflectSlice {
-		fmt.Println(reflect.Indirect(reflect.ValueOf(v)).Field(0).Type())
+}
+
+func copyUnsortedSliceToMultiSort(unsortedSlice interface{}) multiSortSlice{
+	var sortSlice multiSortSlice
+	reflectCopy := reflect.Indirect(reflect.ValueOf(unsortedSlice))
+	for i:= 0; i< reflectCopy.Len() ;i++ {
+		sortSlice = append(sortSlice, reflectCopy.Index(i).Interface())
 	}
-	fmt.Println(reflect.Indirect(reflect.ValueOf(data[0])).Field(0).Type().Name())
-	return dataType{}
+	return sortSlice
+}
+
+func GetLessValue(msI, msJ reflect.Value) bool{
+	switch msI.Kind(){
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32,reflect.Uint64:
+		return msI.Int() < msJ.Int()
+	case reflect.Float32, reflect.Float64:
+		return msI.Float() < msJ.Float()
+	default:
+		return msI.String() < msJ.String()
+	}
+}
+
+var CurrentKeyIndex int
+var SortKeys []string
+
+func GetKey() string {
+	return SortKeys[CurrentKeyIndex]
 }
