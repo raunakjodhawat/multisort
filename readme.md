@@ -17,4 +17,6 @@ go get -d github.com/raunakjodhawat/multisort
     https://raunakjodhawat.github.io/multisort/
 ```
 
-[![GoDoc](https://godoc.org/github.com/raunakjodhawat/multisort?status.svg)](https://godoc.org/github.com/raunakjodhawat/multisort)
+[![GoDoc](https://godoc.org/github.com/raunakjodhawat/multisort?status.svg)](https://godoc.org/github.com/raunakjodhawat/multisort)  
+
+[Website](https://raunakjodhawat.github.io/multisort/)
