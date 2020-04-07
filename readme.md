@@ -5,7 +5,21 @@ This repo aims to increase the functionality of default Sort package provided by
 ```
 go get -d github.com/raunakjodhawat/multisort
 ```
+# Usage
+```
+// Define input parameters  
+    sortKeys := []string{"Name", "Age"}
+    ascendingOrder := []bool{false, true}
 
+// Send it to multisort function
+    multiSortResponse, _ := multisort.MultiSort(persons, sortKeys, ascendingOrder)
+// Traverse the function, and convert each element back to the desired type    
+    for i := range multiSortResponse {
+        persons[i] = multiSortResponse[i].(Person)
+    }
+// Use the sorted Slice
+    fmt.Println(persons)
+```
 ## External Dependency
 1. fmt
 2. time
