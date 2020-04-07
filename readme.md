@@ -20,3 +20,10 @@ go get -d github.com/raunakjodhawat/multisort
 [![GoDoc](https://godoc.org/github.com/raunakjodhawat/multisort?status.svg)](https://godoc.org/github.com/raunakjodhawat/multisort)  
 
 [Website](https://raunakjodhawat.github.io/multisort/)
+
+inner type is always defined by go. I am using that
+
+no fatal is send
+
+contributuions
+"%#V" use

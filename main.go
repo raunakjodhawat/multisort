@@ -32,13 +32,12 @@ type multiSortSlice []multiSortInterface
 // MultiSort takes in a data *interface and the dataSlice *interface
 // it returns the sorted slice based on the keys specified by sortKeys and ascendingSortOrder values
 // returns an error, if not nil
-func MultiSort(unsortedSlice interface{}, sortKeys []string, ascendingSortOrder []bool){
+func MultiSort(unsortedSlice interface{}, sortKeys []string, ascendingSortOrder []bool) interface{}{
 	// return if not a slice
 	if reflect.TypeOf(unsortedSlice).Kind() != reflect.Slice{
 		fmt.Errorf("input is not a slice")
 	}
 	// TODO: Application does not throw any fatal error
-
 	var ms multiSortSlice
 	// Anonymous function to launch three Go routines, for concurrent processing of non related processing
 	var wg sync.WaitGroup
@@ -48,17 +47,13 @@ func MultiSort(unsortedSlice interface{}, sortKeys []string, ascendingSortOrder 
 	wg.Wait()
 
 	ms = copyUnsortedSliceToMultiSort(unsortedSlice)
-	fmt.Println(ms)
 	// By default sort by the order in which Keys is received. Then By the order (if present) in ascendingSortOrder, else (Ascending order as default ordering)
 	// Iterate on the sortKeys
 	for i, _ := range SortKeys {
 		CurrentKeyIndex = i
 		sort.Sort(ms)
-		// ms
-		fmt.Println(ms)
-		// TODO: send correct slice
 	}
-	//
+	return ms
 }
 
 func normalizeAscendingSortOrderSlice(wg *sync.WaitGroup, sortKeys []string, ascendingSortOrder []bool){
