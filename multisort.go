@@ -53,7 +53,7 @@ func MultiSort(unsortedSlice interface{}, inputSortKeys []string, ascendingSortO
 		if i < len(ascendingSortOrder) && ascendingSortOrder[i] {
 			sort.Sort(ms)
 		} else {
-			sort.Reverse(ms)
+			sort.Sort(sort.Reverse(ms))
 		}
 	}
 	return ms, nil
