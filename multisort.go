@@ -72,9 +72,12 @@ func MultiSort(unsortedSlice interface{}, inputSortKeys []string, ascendingSortO
 	return ms, nil
 }
 
+// currentKeyIndex stored the current index, as part of global context
 var currentKeyIndex int
+// inputSortKeys are copied to global variables. Because, the sort Interface does not implement a method that takes in the key
 var sortKeys []string
 
+// copyKeys, copies the input keys to a global object
 func copyKeys(wg *sync.WaitGroup, inputSortKeys []string) {
 	defer wg.Done()
 	// Copy SortKeys to global object
@@ -83,6 +86,7 @@ func copyKeys(wg *sync.WaitGroup, inputSortKeys []string) {
 	}
 }
 
+// copyUnsortedSliceToMultiSort, converts T.interface{} -> T.multiSortSlice (T.[]multiSortInterface)
 func copyUnsortedSliceToMultiSort(unsortedSlice interface{}) multiSortSlice {
 	var sortSlice multiSortSlice
 	reflectCopy := reflect.Indirect(reflect.ValueOf(unsortedSlice))
@@ -92,6 +96,8 @@ func copyUnsortedSliceToMultiSort(unsortedSlice interface{}) multiSortSlice {
 	return sortSlice
 }
 
+// getLessValue, based on the type of values, for which we are sorting. This function converts it into equivalent types
+// It performs the calculation required by Less function in sort interface and returns a Bool
 func getLessValue(msI, msJ reflect.Value) bool {
 	switch msI.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
@@ -103,10 +109,14 @@ func getLessValue(msI, msJ reflect.Value) bool {
 	}
 }
 
+// getKey, returns the current key by which sorting is taking place
 func getKey() string {
 	return sortKeys[currentKeyIndex]
 }
 
+// Help, provides a use case of how to convert the T.([]interface) into the required type
+// desiredType is the type which the client sends in the data
+// The motive being, that developer does not have to go back to github to figure out what to do with the sorted slice
 func Help() string {
 	return `outputSlice, err := MultiSort(inputSlice, inputKeys, inputOrder)
 	for i := range outputSlice {
