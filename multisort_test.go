@@ -5,27 +5,27 @@ import (
 	"testing"
 )
 
-type multiSortExamlePerson struct{
+type multiSortExamlePerson struct {
 	Name string
-	Age int
+	Age  int
 }
 
 func makeInput() []multiSortExamlePerson {
 	p1 := multiSortExamlePerson{
 		Name: "Joe",
-		Age: 26,
+		Age:  26,
 	}
 	p2 := multiSortExamlePerson{
 		Name: "Azin",
-		Age: 14,
+		Age:  14,
 	}
 	p3 := multiSortExamlePerson{
 		Name: "Bold",
-		Age: 11,
+		Age:  11,
 	}
 	p4 := multiSortExamlePerson{
 		Name: "AAND",
-		Age: 14,
+		Age:  14,
 	}
 	multisortExamplePersons := []multiSortExamlePerson{p1, p2, p3, p4}
 
@@ -81,19 +81,19 @@ func ExampleMultiSort_SingleKeyType_2() {
 func TestMultiSort(t *testing.T) {
 	p1 := multiSortExamlePerson{
 		Name: "Joe",
-		Age: 26,
+		Age:  26,
 	}
 	p2 := multiSortExamlePerson{
 		Name: "Azin",
-		Age: 14,
+		Age:  14,
 	}
 	p3 := multiSortExamlePerson{
 		Name: "Bold",
-		Age: 11,
+		Age:  11,
 	}
 	p4 := multiSortExamlePerson{
 		Name: "AAND",
-		Age: 14,
+		Age:  14,
 	}
 
 	sortKeysmatrix := [][]string{
@@ -137,7 +137,7 @@ func TestMultiSort(t *testing.T) {
 		if a != b {
 			t.Errorf("Expected: %v Got %v", a, b)
 		}
-		fmt.Println(v, multiSortResponse, a==b)
+		fmt.Println(v, multiSortResponse, a == b)
 
 	}
 }
