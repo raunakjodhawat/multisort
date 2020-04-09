@@ -8,6 +8,8 @@ import (
 	"sync"
 )
 
+// Less, Len and Swap function are required by the Sort interface
+// Less function, checks if value at ith index is less than jth index
 func (ms multiSortSlice) Less(i, j int) bool {
 	return getLessValue(reflect.ValueOf(ms[i]).FieldByName(getKey()), reflect.ValueOf(ms[j]).FieldByName(getKey()))
 }
@@ -22,40 +24,51 @@ func (ms multiSortSlice) Swap(i, j int) {
 	ms[i], ms[j] = ms[j], ms[i]
 }
 
+// multiSortInterface, holds the incoming interface
 type multiSortInterface interface{}
+// multiSortSlice, is used to []interface{} to []multiSortInterface{}
 type multiSortSlice []multiSortInterface
 
-// MultiSort takes in a data *interface and the dataSlice *interface
-// it returns the sorted slice based on the keys specified by sortKeys and ascendingSortOrder values
-// returns an error, if not nil
+// MultiSort takes in a unsortedSlice interface and the inputSortKeys []string, ascendingSortOrder []bool
+// returns the sorted slice based on the keys specified by sortKeys and ascendingSortOrder values
+// returns []multiSortInterface, and error
+// []multiSortInterface can be taken as interface in Clients program and can be converted to desired type
 func MultiSort(unsortedSlice interface{}, inputSortKeys []string, ascendingSortOrder []bool) ([]multiSortInterface, error) {
 	// return if not a slice
 	if reflect.TypeOf(unsortedSlice).Kind() != reflect.Slice {
 		return nil, fmt.Errorf("input is not a slice")
 	}
 
-	var ms multiSortSlice
 	// Anonymous function to launch One Go routines, for concurrent processing of non related processing
 	var wg sync.WaitGroup
 	wg.Add(1)
+	// Launch a Go routine, for parallel execution
 	go copyKeys(&wg, inputSortKeys)
+	// Stores the unsorted slice
+	var ms multiSortSlice
+	// Copy the input to the multiSortSlice T
+	ms = copyUnsortedSliceToMultiSort(unsortedSlice)
+	// By default sort by the order in which Keys is received.
+	// Then By the order (if present) in ascendingSortOrder, else (Ascending order as default ordering)
 	wg.Wait()
 
-	ms = copyUnsortedSliceToMultiSort(unsortedSlice)
-	// By default sort by the order in which Keys is received. Then By the order (if present) in ascendingSortOrder, else (Ascending order as default ordering)
-	// Iterate on the sortKeys
+	// For every key in the sortKeys input
 	for i := range sortKeys {
+		// Change the index of current Key. sortKeys are made available globally, through the copyKeys routine
 		currentKeyIndex = i
+		// Check if there's a value with the current global key
 		reflectValue := reflect.ValueOf(ms[0]).FieldByName(getKey())
 		if !reflectValue.IsValid() {
 			return ms, fmt.Errorf("%v, not present (as key) on the input slice", getKey())
 		}
+		// sort on the basis of default ordering if no user defined sort order is present
 		if i < len(ascendingSortOrder) && ascendingSortOrder[i] {
 			sort.Sort(ms)
 		} else {
 			sort.Sort(sort.Reverse(ms))
 		}
 	}
+	// return the sorted slice as []multiSortInterface, which can be converted to user defined Type
 	return ms, nil
 }
 
@@ -92,4 +105,11 @@ func getLessValue(msI, msJ reflect.Value) bool {
 
 func getKey() string {
 	return sortKeys[currentKeyIndex]
+}
+
+func Help() string {
+	return `outputSlice, err := MultiSort(inputSlice, inputKeys, inputOrder)
+	for i := range outputSlice {
+		outputSlice[i] = outputSlice[i].(desiredType)
+	}`
 }

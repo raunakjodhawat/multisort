@@ -19,6 +19,8 @@ go get -d github.com/raunakjodhawat/multisort
     }
 // Use the sorted Slice
     fmt.Println(persons)
+
+    help()
 ```
 ## External Dependency
 1. fmt
@@ -26,6 +28,9 @@ go get -d github.com/raunakjodhawat/multisort
 3. reflect
 4. testing
 
+
+### Limitation
+1. us
 ### Website
 ```
     https://raunakjodhawat.github.io/multisort/

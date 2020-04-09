@@ -91,6 +91,18 @@ func ExampleMultiSort_singleKey2() {
 	// Output: [{Joe 26} {Azin 14} {AAND 14} {Bold 11}]
 }
 
+// ExampleHelp provides, a use case of how to convert the T.([]interface) into the required type
+// desiredType is the type which the client sends in the data
+func ExampleHelp() {
+	fmt.Println(Help())
+	// Output:
+	/*
+		outputSlice, err := MultiSort(inputSlice, inputKeys, inputOrder)
+	for i := range outputSlice {
+		outputSlice[i] = outputSlice[i].(desiredType)
+	}
+	*/
+}
 // TestMultiSort, performs table testing with All possible combination of 2 keys and 2 orders. Taking each key one at a time and in combination
 func TestMultiSort(t *testing.T) {
 	// variable declaration for Type multiSortExamplePerson to be tested as a slice
@@ -163,5 +175,17 @@ func TestMultiSort(t *testing.T) {
 		if expectedResult != multiSortResult {
 			t.Errorf("Expected: %v Got %v", expectedResult, multiSortResult)
 		}
+	}
+}
+
+// TestHelp to check, if Help function remains unchanged
+func TestHelp(t *testing.T) {
+	expectedResult := `outputSlice, err := MultiSort(inputSlice, inputKeys, inputOrder)
+	for i := range outputSlice {
+		outputSlice[i] = outputSlice[i].(desiredType)
+	}`
+	actualResult := Help()
+	if expectedResult != actualResult {
+		t.Errorf("Expected: %v Got %v", expectedResult, actualResult)
 	}
 }
