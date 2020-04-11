@@ -62,6 +62,43 @@ Usage:
 Usage:
     multisort.Help()
 ```
+### Example
+```cassandraql
+    
+    type multiSortExamplePerson struct {
+	    Name string
+	    Age  int
+    }
+
+    p1 := multiSortExamplePerson{
+		Name: "Joe",
+		Age:  26,
+	}
+    p2 := multiSortExamplePerson{
+    	Name: "Azin",
+    	Age:  14,
+    }
+    p3 := multiSortExamplePerson{
+    	Name: "Bold",
+    	Age:  11,
+    }
+    p4 := multiSortExamplePerson{
+    	Name: "AAND",
+    	Age:  14,
+    }
+
+    multisortExamplePersons := []multiSortExamplePerson{p1, p2, p3, p4}
+    
+    multiSortResponse, err := MultiSort(multisortExamplePersons, sortKeys, ascendingOrder)
+    if err != nil {
+    	fmt.Println("Failed to sort", err)
+    }
+    for i := range multiSortResponse {
+    	multiSortResponse[i] = multiSortResponse[i].(multiSortExamplePerson)
+    }
+    fmt.Println(multiSortResponse)
+    // Output: [{Joe 26} {Azin 14} {AAND 14} {Bold 11}]
+```
 
 [![GoDoc](https://godoc.org/github.com/raunakjodhawat/multisort?status.svg)](https://godoc.org/github.com/raunakjodhawat/multisort)  
 
