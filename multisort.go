@@ -29,11 +29,11 @@ type multiSortInterface interface{}
 // multiSortSlice, is used to []interface{} to []multiSortInterface{}
 type multiSortSlice []multiSortInterface
 
-// MultiSort takes in a unsortedSlice interface and the inputSortKeys []string, ascendingSortOrder []bool
+// MultiSorted takes in a unsortedSlice interface and the inputSortKeys []string, ascendingSortOrder []bool
 // returns the sorted slice based on the keys specified by sortKeys and ascendingSortOrder values
 // returns []multiSortInterface, and error
 // []multiSortInterface can be taken as interface in Clients program and can be converted to desired type
-func MultiSort(unsortedSlice interface{}, inputSortKeys []string, ascendingSortOrder []bool) ([]multiSortInterface, error) {
+func MultiSorted(unsortedSlice interface{}, inputSortKeys []string, ascendingSortOrder []bool) ([]multiSortInterface, error) {
 	// return if not a slice
 	if reflect.TypeOf(unsortedSlice).Kind() != reflect.Slice {
 		return nil, fmt.Errorf("input is not a slice")
@@ -47,7 +47,7 @@ func MultiSort(unsortedSlice interface{}, inputSortKeys []string, ascendingSortO
 	// Stores the unsorted slice
 	var ms multiSortSlice
 	// Copy the input to the multiSortSlice T
-	ms = copyUnsortedSliceToMultiSort(unsortedSlice)
+	ms = copyUnsortedSliceToMultiSorted(unsortedSlice)
 	// By default sort by the order in which Keys is received.
 	// Then By the order (if present) in ascendingSortOrder, else (Ascending order as default ordering)
 	wg.Wait()
@@ -86,8 +86,8 @@ func copyKeys(wg *sync.WaitGroup, inputSortKeys []string) {
 	}
 }
 
-// copyUnsortedSliceToMultiSort, converts T.interface{} -> T.multiSortSlice (T.[]multiSortInterface)
-func copyUnsortedSliceToMultiSort(unsortedSlice interface{}) multiSortSlice {
+// copyUnsortedSliceToMultiSorted, converts T.interface{} -> T.multiSortSlice (T.[]multiSortInterface)
+func copyUnsortedSliceToMultiSorted(unsortedSlice interface{}) multiSortSlice {
 	var sortSlice multiSortSlice
 	reflectCopy := reflect.Indirect(reflect.ValueOf(unsortedSlice))
 	for i := 0; i < reflectCopy.Len(); i++ {
@@ -118,7 +118,7 @@ func getKey() string {
 // desiredType is the type which the client sends in the data
 // The motive being, that developer does not have to go back to github to figure out what to do with the sorted slice
 func Help() string {
-	return `outputSlice, err := MultiSort(inputSlice, inputKeys, inputOrder)
+	return `outputSlice, err := MultiSorted(inputSlice, inputKeys, inputOrder)
 	for i := range outputSlice {
 		outputSlice[i] = outputSlice[i].(desiredType)
 	}`

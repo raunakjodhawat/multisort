@@ -36,14 +36,14 @@ func makeInput() []multiSortExamplePerson {
 	return multisortExamplePersons
 }
 
-// ExampleMultiSort_multiKey Function, sorts the input with two keys
+// ExampleMultiSorted_multiKey Function, sorts the input with two keys
 // Sorts slice of multiSortExamplePerson with key: Name in Descending Order and then with Key: Age in Ascending
 // Prints the output, after converting the []interface back to expected(required) type
-func ExampleMultiSort_multiKey() {
+func ExampleMultiSorted_multiKey() {
 	multisortExamplePersons := makeInput()
 	sortKeys := []string{"Name", "Age"}
 	ascendingOrder := []bool{false, true}
-	multiSortResponse, err := MultiSort(multisortExamplePersons, sortKeys, ascendingOrder)
+	multiSortResponse, err := MultiSorted(multisortExamplePersons, sortKeys, ascendingOrder)
 	if err != nil {
 		return
 	}
@@ -54,14 +54,14 @@ func ExampleMultiSort_multiKey() {
 	// Output: [{Joe 26} {Azin 14} {AAND 14} {Bold 11}]
 }
 
-// ExampleMultiSort_singleKey1 Function, sorts the input with one key
+// ExampleMultiSorted_singleKey1 Function, sorts the input with one key
 // Sorts slice of multiSortExamplePerson with key: Name in Ascending Order
 // Prints the output, after converting the []interface back to expected(required) type
-func ExampleMultiSort_singleKey1() {
+func ExampleMultiSorted_singleKey1() {
 	multisortExamplePersons := makeInput()
 	sortKeys := []string{"Name"}
 	ascendingOrder := []bool{true}
-	multiSortResponse, err := MultiSort(multisortExamplePersons, sortKeys, ascendingOrder)
+	multiSortResponse, err := MultiSorted(multisortExamplePersons, sortKeys, ascendingOrder)
 	if err != nil {
 		return
 	}
@@ -72,15 +72,15 @@ func ExampleMultiSort_singleKey1() {
 	// Output: [{Joe 26} {Bold 11} {Azin 14} {AAND 14}]
 }
 
-// ExampleMultiSort_singleKey2 Function, sorts the input with one key
+// ExampleMultiSorted_singleKey2 Function, sorts the input with one key
 // Demonstrates that the default ascending order is applied, when nothing is provided with ascendingOrder slice input
 // Sorts slice of multiSortExamplePerson with key: Age in Ascending Order (Taken as default)
 // Prints the output, after converting the []interface back to expected(required) type
-func ExampleMultiSort_singleKey2() {
+func ExampleMultiSorted_singleKey2() {
 	multisortExamplePersons := makeInput()
 	sortKeys := []string{"Age"}
 	var ascendingOrder []bool
-	multiSortResponse, err := MultiSort(multisortExamplePersons, sortKeys, ascendingOrder)
+	multiSortResponse, err := MultiSorted(multisortExamplePersons, sortKeys, ascendingOrder)
 	if err != nil {
 		return
 	}
@@ -97,14 +97,14 @@ func ExampleHelp() {
 	fmt.Println(Help())
 	// Output:
 	/*
-		outputSlice, err := MultiSort(inputSlice, inputKeys, inputOrder)
+		outputSlice, err := MultiSorted(inputSlice, inputKeys, inputOrder)
 	for i := range outputSlice {
 		outputSlice[i] = outputSlice[i].(desiredType)
 	}
 	*/
 }
-// TestMultiSort, performs table testing with All possible combination of 2 keys and 2 orders. Taking each key one at a time and in combination
-func TestMultiSort(t *testing.T) {
+// TestMultiSorted, performs table testing with All possible combination of 2 keys and 2 orders. Taking each key one at a time and in combination
+func TestMultiSorted(t *testing.T) {
 	// variable declaration for Type multiSortExamplePerson to be tested as a slice
 	p1 := multiSortExamplePerson{
 		Name: "Joe",
@@ -164,7 +164,7 @@ func TestMultiSort(t *testing.T) {
 		// create the input
 		multisortExamplePersons := makeInput()
 		// send it to the Multi Sort, to sort
-		multiSortResponse, err := MultiSort(multisortExamplePersons, sortKeysmatrix[i], ascendingOrderSlice[i])
+		multiSortResponse, err := MultiSorted(multisortExamplePersons, sortKeysmatrix[i], ascendingOrderSlice[i])
 		if err != nil {
 			return
 		}
@@ -180,7 +180,7 @@ func TestMultiSort(t *testing.T) {
 
 // TestHelp to check, if Help function remains unchanged
 func TestHelp(t *testing.T) {
-	expectedResult := `outputSlice, err := MultiSort(inputSlice, inputKeys, inputOrder)
+	expectedResult := `outputSlice, err := MultiSorted(inputSlice, inputKeys, inputOrder)
 	for i := range outputSlice {
 		outputSlice[i] = outputSlice[i].(desiredType)
 	}`

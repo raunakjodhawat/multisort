@@ -2,7 +2,7 @@
 ### Purpose
 This repo aims to increase the functionality of default Sort package provided by Golang.
 It's a extremely light weight program, that exports just two functions:
-1. multisort(inputSlice, inputKeys, inputOrders) []interface{}
+1. multisorted(inputSlice, inputKeys, inputOrders) []interface{}
 2. Help()
 
 ### Installation
@@ -11,13 +11,13 @@ go get -d github.com/raunakjodhawat/multisort
 ```
 ### Usage
 ```
-    sortedSlice, err := multisort.MultiSort(inputSlice, inputKeys, SortOrders)
+    sortedSlice, err := multisort.MultiSorted(inputSlice, inputKeys, SortOrders)
 
     fmt.Println(Help())
 ```
 
 #### Details
-##### Function - MultiSort
+##### Function - MultiSorted
     - Three Input Parameter
         -- inputSlice (The Slice you want to Sort, can be of Struct of any form)
             --- Currently, the program can not sort Slices with the underlying struct's containing non-primitive type
@@ -28,7 +28,7 @@ go get -d github.com/raunakjodhawat/multisort
     - Two Output
         -- A slice of sorted Array
             --- Sorted array if required can be converted to user defined Struct, using the below function
-                outputSlice, err := MultiSort(inputSlice, inputKeys, inputOrder)
+                outputSlice, err := MultiSorted(inputSlice, inputKeys, inputOrder)
                 	for i := range outputSlice {
                 		outputSlice[i] = outputSlice[i].(desiredType)
                 	}
@@ -40,8 +40,8 @@ Usage:
     sortKeys := []string{"Name", "Age"}
     ascendingOrder := []bool{false, true}
 
-// Send it to multisort function
-    multiSortResponse, err := multisort.MultiSort(persons, sortKeys, ascendingOrder)
+// Send it to multisorted function
+    multiSortResponse, err := multisort.MultiSorted(persons, sortKeys, ascendingOrder)
     
     if err != nil {
         // return/ Print /Panic
@@ -89,7 +89,7 @@ Usage:
 
     multisortExamplePersons := []multiSortExamplePerson{p1, p2, p3, p4}
     
-    multiSortResponse, err := MultiSort(multisortExamplePersons, sortKeys, ascendingOrder)
+    multiSortResponse, err := MultiSorted(multisortExamplePersons, sortKeys, ascendingOrder)
     if err != nil {
     	fmt.Println("Failed to sort", err)
     }
