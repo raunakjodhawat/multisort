@@ -1,4 +1,5 @@
 ![Go](https://github.com/raunakjodhawat/multisort/workflows/Go/badge.svg)
+[![GoDoc](https://godoc.org/github.com/raunakjodhawat/multisort?status.svg)](https://godoc.org/github.com/raunakjodhawat/multisort) 
 ## Getting Started
 ### Purpose
 This repo aims to increase the functionality of default Sort package provided by Golang.
@@ -99,9 +100,7 @@ Usage:
     }
     fmt.Println(multiSortResponse)
     // Output: [{Joe 26} {Azin 14} {AAND 14} {Bold 11}]
-```
-
-[![GoDoc](https://godoc.org/github.com/raunakjodhawat/multisort?status.svg)](https://godoc.org/github.com/raunakjodhawat/multisort)  
+``` 
 
 [Website](https://raunakjodhawat.github.io/multisort/)
 
