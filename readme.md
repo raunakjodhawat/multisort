@@ -1,3 +1,4 @@
+![Go](https://github.com/raunakjodhawat/multisort/workflows/Go/badge.svg)
 ## Getting Started
 ### Purpose
 This repo aims to increase the functionality of default Sort package provided by Golang.
