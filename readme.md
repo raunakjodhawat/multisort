@@ -1,5 +1,5 @@
 ![Go](https://github.com/raunakjodhawat/multisort/workflows/Go/badge.svg)
-[![GoDoc](https://godoc.org/github.com/raunakjodhawat/multisort?status.svg)](https://godoc.org/github.com/raunakjodhawat/multisort) 
+[![GoDoc](https://godoc.org/github.com/raunakjodhawat/multisort?status.svg)](https://pkg.go.dev/github.com/raunakjodhawat/multisort) 
 ## Getting Started
 ### Purpose
 This repo aims to increase the functionality of default Sort package provided by Golang.
