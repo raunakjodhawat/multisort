@@ -101,10 +101,6 @@ Usage:
     fmt.Println(multiSortResponse)
     // Output: [{Joe 26} {Azin 14} {AAND 14} {Bold 11}]
 ``` 
-
-[Website](https://raunakjodhawat.github.io/multisort/)
-
-[LinkedIn](https://www.linkedin.com/in/jodhawat/)
 ##### External Dependencies
 1. fmt
 2. reflect
